@@ -1,3 +1,5 @@
+# Wordle Finder 
+
 Wordle Finder, with its user-friendly graphical interface, lists possible words based on the letters provided in the Wordle game. It supports both Turkish and English words. 
 
 <img src="https://github.com/user-attachments/assets/2ce53237-a045-4111-9a92-bba888baab77" width=48%>
