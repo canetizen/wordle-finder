@@ -21,7 +21,7 @@ class Model:
 
     def findPossibleWords(self, searchedWord, excludedLetters):
         # Convert excluded letters to a set for easier comparison
-        excludedLettersSet = set(excludedLetters.lower().split(',')) if excludedLetters else set()
+        excludedLettersSet = set(char.strip() for char in excludedLetters.lower().split(',')) if excludedLetters else set()
         return self.trie.searchWordWithPattern(searchedWord.lower(), excludedLettersSet)
     
     def clearTrie(self):
