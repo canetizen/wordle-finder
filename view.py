@@ -20,8 +20,10 @@ class View:
         ui_errorFile.close()
 
     def showError(self, error):
+        # Display the error message in the error window
         self.errorWindow.label_error.setText(error)
         self.errorWindow.show()
 
     def setPossibleWords(self, wordList):
+        # Display the possible word list in the main window
         self.mainWindow.label_result.setPlainText(wordList)

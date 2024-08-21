@@ -10,6 +10,7 @@ class Trie:
     def insert(self, word):
         node = self.root
         for char in word.strip():
+            # Create a new node if the character is not present
             if char not in node.children:
                 node.children[char] = TrieNode()
             node = node.children[char]

@@ -6,7 +6,8 @@ class Model:
 
     def readFromFile(self, lang):
         self.clearTrie()
-        try: 
+        try:
+            # Attempt to read the words from the specified language file
             with open(f"lang/{lang}.txt", "r") as file:
                 for line in file:
                     self.trie.insert(line.strip())
@@ -19,8 +20,10 @@ class Model:
             return 1
 
     def findPossibleWords(self, searchedWord, excludedLetters):
+        # Convert excluded letters to a set for easier comparison
         excludedLettersSet = set(excludedLetters.lower().split(',')) if excludedLetters else set()
         return self.trie.searchWordWithPattern(searchedWord.lower(), excludedLettersSet)
     
     def clearTrie(self):
+        # Clear the Trie before loading new data
         self.trie = Trie()
