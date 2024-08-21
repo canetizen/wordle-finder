@@ -15,14 +15,25 @@ class Trie:
             node = node.children[char]
         node.isEndOfWord = True
 
-    def searchWordWithRegex(self, regex):
+    def searchWordWithPattern(self, searchedWord, excludedLettersSet):
         results = []
-        self._searchRecursive(self.root, "", regex, results)
+        self._searchWithPattern(self.root, "", searchedWord, 0, excludedLettersSet, results)
         return results
 
-    def _searchRecursive(self, node, current_word, regex, results):
-        if node.isEndOfWord and regex.fullmatch(current_word):
-            results.append(current_word)
+    def _searchWithPattern(self, node, currentWord, searchedWord, wordIdx, excludedLettersSet, results):
+        if wordIdx == len(searchedWord):
+            if node.isEndOfWord:
+                results.append(currentWord)
+            return
         
-        for char, child_node in node.children.items():
-            self._searchRecursive(child_node, current_word + char, regex, results)
+        char = searchedWord[wordIdx]
+
+        # If the character is a wildcard (*), try all letters except those in excludedLettersSet
+        if char == '*':
+            for childChar, childNode in node.children.items():
+                if childChar not in excludedLettersSet:
+                    self._searchWithPattern(childNode, currentWord + childChar, searchedWord, wordIdx + 1, excludedLettersSet, results)
+        else:
+            # For a specific letter: Check that letter against excludedLettersSet
+            if char in node.children and char not in excludedLettersSet:
+                self._searchWithPattern(node.children[char], currentWord + char, searchedWord, wordIdx + 1, excludedLettersSet, results)

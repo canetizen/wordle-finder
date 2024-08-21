@@ -25,17 +25,23 @@ class Controller:
             letter.toPlainText() if letter.toPlainText() else '*'
             for letter in lineEdits
         )
+
+        if all(char == '*' for char in searchedWord):
+            self.view.showError("Lütfen tahmin için harf giriniz.")
+            return
         
         if any(len(letter.toPlainText()) > 1 for letter in lineEdits):
             self.view.showError("Sadece harf giriniz.")
-            for letter in lineEdits:
-                letter.clear()
-            self.view.setPossibleWords(self, "")
             return
         
         excludedLetters = self.view.mainWindow.input_notContain.toPlainText()
-        generatedRegex = self.model.generateRegex(searchedWord, excludedLetters)
-        possibleWordList = self.model.findPossibleWords(generatedRegex)
+
+        if excludedLetters and not all(len(char.strip()) == 1 for char in excludedLetters.split(',')):
+            self.view.showError("Bulmacada bulunmayan karakterler virgulle ayrılmalıdır (ör:'a,b' ya da 'a, b').")
+            self.view.setPossibleWords("")
+            return
+        
+        possibleWordList = self.model.findPossibleWords(searchedWord, excludedLetters)
 
         if len(possibleWordList) == 0:
             self.view.setPossibleWords("Olası kelime bulunamadı.")
@@ -48,5 +54,3 @@ class Controller:
         if self.model.readFromFile(lang):
             self.view.showError("Dil dosyası okunurken hata oluştu.")
         self.view.setPossibleWords("")
-    
-
