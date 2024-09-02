@@ -19,10 +19,11 @@ class Model:
             print(f"An error occurred: {e}")
             return 1
 
-    def findPossibleWords(self, searchedWord, excludedLetters):
+    def findPossibleWords(self, searchedWord, excludedLetters, includedLetters):
         # Convert excluded letters to a set for easier comparison
         excludedLettersSet = set(char.strip() for char in excludedLetters.lower().split(',')) if excludedLetters else set()
-        return self.trie.searchWordWithPattern(searchedWord.lower(), excludedLettersSet)
+        includedLettersSet = set(char.strip() for char in includedLetters.lower().split(',')) if includedLetters else set()
+        return self.trie.searchWordWithPattern(searchedWord.lower(), excludedLettersSet, includedLettersSet)
     
     def clearTrie(self):
         # Clear the Trie before loading new data

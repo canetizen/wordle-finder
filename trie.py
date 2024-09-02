@@ -16,14 +16,14 @@ class Trie:
             node = node.children[char]
         node.isEndOfWord = True
 
-    def searchWordWithPattern(self, searchedWord, excludedLettersSet):
+    def searchWordWithPattern(self, searchedWord, excludedLettersSet, includedLettersSet):
         results = []
-        self._searchWithPattern(self.root, "", searchedWord, 0, excludedLettersSet, results)
+        self._searchWithPattern(self.root, "", searchedWord, 0, excludedLettersSet, results, includedLettersSet)
         return results
 
-    def _searchWithPattern(self, node, currentWord, searchedWord, wordIdx, excludedLettersSet, results):
+    def _searchWithPattern(self, node, currentWord, searchedWord, wordIdx, excludedLettersSet, results, includedLettersSet):
         if wordIdx == len(searchedWord):
-            if node.isEndOfWord:
+            if node.isEndOfWord and all(char in currentWord for char in includedLettersSet):
                 results.append(currentWord)
             return
         
@@ -33,8 +33,8 @@ class Trie:
         if char == '*':
             for childChar, childNode in node.children.items():
                 if childChar not in excludedLettersSet:
-                    self._searchWithPattern(childNode, currentWord + childChar, searchedWord, wordIdx + 1, excludedLettersSet, results)
+                    self._searchWithPattern(childNode, currentWord + childChar, searchedWord, wordIdx + 1, excludedLettersSet, results, includedLettersSet)
         else:
             # For a specific letter: Check that letter against excludedLettersSet
             if char in node.children and char not in excludedLettersSet:
-                self._searchWithPattern(node.children[char], currentWord + char, searchedWord, wordIdx + 1, excludedLettersSet, results)
+                self._searchWithPattern(node.children[char], currentWord + char, searchedWord, wordIdx + 1, excludedLettersSet, results, includedLettersSet)

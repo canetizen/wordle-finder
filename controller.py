@@ -43,14 +43,16 @@ class Controller:
             return
         
         excludedLetters = self.view.mainWindow.input_notContain.toPlainText()
+        includedLetters = self.view.mainWindow.input_contain.toPlainText()
 
         # Show an error if excluded letters are not separated by commas
-        if excludedLetters and not all(len(char.strip()) == 1 for char in excludedLetters.split(',')):
-            self.view.showError("Characters not in the puzzle should be separated by commas (e.g., 'a,b' or 'a, b').")
+        if (excludedLetters and not all(len(charEx.strip()) == 1 for charEx in excludedLetters.split(',')) 
+            or (includedLetters and not all(len(charIn.strip()) == 1 for charIn in includedLetters.split(',')))):
+            self.view.showError("Characters should be separated by commas (e.g., 'a,b' or 'a, b').")
             self.view.setPossibleWords("")
             return
         
-        possibleWordList = self.model.findPossibleWords(searchedWord, excludedLetters)
+        possibleWordList = self.model.findPossibleWords(searchedWord, excludedLetters, includedLetters)
 
         # Display an appropriate message if no words are found
         if len(possibleWordList) == 0:
@@ -58,7 +60,6 @@ class Controller:
         else:
             listToString = ', '.join(possibleWordList)
             self.view.setPossibleWords(listToString)
-
 
     def changeLanguage(self, lang):
         # Attempt to read the language file, show an error if unsuccessful
